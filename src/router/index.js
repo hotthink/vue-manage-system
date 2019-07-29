@@ -30,6 +30,11 @@ export default new Router({
                     meta: { title: '基础表格' }
                 },
                 {
+                    path: '/htab1',
+                    component: resolve => require(['../components/page/htab.vue'], resolve),
+                    meta: { title: 'HTab表格' }
+                },
+                {
                     path: '/tabs',
                     component: resolve => require(['../components/page/Tabs.vue'], resolve),
                     meta: { title: 'tab选项卡' }
