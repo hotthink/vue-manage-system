@@ -2,11 +2,12 @@ import axios from 'axios';
 
 const service = axios.create({
     // process.env.NODE_ENV === 'development' 来判断是否开发环境
-    baseURL: 'https://www.easy-mock.com/mock/592501a391470c0ac1fab128',
+    baseURL: 'https://localhost:5002/api/',
     timeout: 5000
 })
 
-service.interceptors.request.use( config => {
+service.interceptors.request.use(config => {
+
     return config;
 }, error => {
     console.log(error);
@@ -14,9 +15,9 @@ service.interceptors.request.use( config => {
 })
 
 service.interceptors.response.use(response => {
-    if(response.status === 200){
+    if (response.status === 200) {
         return response.data;
-    }else{
+    } else {
         Promise.reject();
     }
 }, error => {
