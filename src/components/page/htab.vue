@@ -33,14 +33,14 @@ export default {
         width: 684,
         height: 720,
         colWidths: 100,
-        rowHeights: 23,
+        rowHeights: 29,
         rowHeaders: true,
-        colHeaders: true,
+        colHeaders: ["时间", "a", "b", "c", "d", "e"],
         fixedRowsTop: 2,
         fixedColumnsLeft: 2,
         manualColumnMove: true,
         manualRowMove: true,
-        dropdownMenu: true,
+        // dropdownMenu: true,
         contextMenu: true,
         manualColumnResize: true,
         manualRowResize: true,
@@ -54,3 +54,9 @@ export default {
   }
 };
 </script>
+<style>
+.handsontable th,
+.handsontable td {
+  line-height: 29px;
+}
+</style>
