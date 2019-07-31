@@ -12,7 +12,13 @@
 				<el-input v-model="select_word" placeholder="筛选关键词" class="handle-input mr10" clearable></el-input>
 				<el-button type="primary" icon="el-icon-search" @click="search">搜索</el-button>
 			</div>
-			<el-table :data="tableData" border class="table" ref="multipleTable">
+			<el-table :data="tableData" border stripe class="table" ref="multipleTable">
+				<el-table-column label="用户姓名">
+					<template slot-scope="scope">
+						<el-button v-if="scope.row['uname']==''" type="text" style="color:lightgray;">点击添加</el-button>
+						<el-button v-else type="text">{{scope.row['uname']}}</el-button>
+					</template>
+				</el-table-column>
 				<el-table-column prop="name" label="姓名" width="120"></el-table-column>
 				<el-table-column prop="tel" label="电话" width="120"></el-table-column>
 				<el-table-column prop="adddate" label="绑定时间" sortable width="150"></el-table-column>
@@ -69,7 +75,7 @@
 				totalpage: 1,
 				multipleSelection: [],
 				select_word: "",
-				optbtns: ['delete', 'modify','premiss'],
+				optbtns: ['delete', 'modify', 'premiss'],
 				del_list: [],
 				editVisible: false,
 				delVisible: false,
@@ -124,7 +130,7 @@
 					return h('el-button', {
 						props: {
 							type: 'text',
-							icon: 'el-icon-edit'
+							icon: 'el-icon-setting'
 						},
 						on: {
 							click: (evt) => {
@@ -162,9 +168,8 @@
 				this.cur_page = 1;
 				this.getData();
 			},
-			
-			handleOpt(opt,index,row)
-			{
+
+			handleOpt(opt, index, row) {
 				console.log(opt);
 				console.log(index);
 				console.log(row);
