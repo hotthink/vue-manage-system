@@ -28,6 +28,7 @@
             <component
               v-for="optbtn in optbtns"
               v-bind:is="optbtn"
+              v-bind:key="optbtn"
               @click="handleOpt(optbtn, scope.$index, scope.row)"
             ></component>
           </template>
@@ -50,10 +51,10 @@
           <el-input v-model="form.name" readonly></el-input>
         </el-form-item>
         <el-form-item label="密码">
-          <el-input v-model.trim="form.password" type="password" placeholder="密码"></el-input>
+          <el-input v-model.trim="form.password" show-password placeholder="密码"></el-input>
         </el-form-item>
         <el-form-item label="确认密码">
-          <el-input v-model.trim="form.password2" type="password" placeholder="确认密码"></el-input>
+          <el-input v-model.trim="form.password2" show-password placeholder="确认密码"></el-input>
         </el-form-item>
         <el-form-item label="openid">
           <el-input v-model="form.openid"></el-input>
@@ -219,33 +220,51 @@ export default {
 
     // 保存编辑
     saveEdit() {
-      this.editVisible = false;
-      this.$message.success(`修改第 ${this.idx + 1} 行成功`);
-      if (this.tableData[this.idx].id === this.id) {
-        this.$set(this.tableData, this.idx, this.form);
+      if (this.form.password != this.form.password2) {
+        this.$message.error("两次输入的密码不一致！");
       } else {
-        for (let i = 0; i < this.tableData.length; i++) {
-          if (this.tableData[i].id === this.id) {
-            this.$set(this.tableData, i, this.form);
-            return;
+        this.editVisible = false;
+        this.$message.success(`修改第 ${this.idx + 1} 行成功`);
+        if (this.tableData[this.idx].id === this.id) {
+          this.$set(this.tableData, this.idx, this.form);
+        } else {
+          for (let i = 0; i < this.tableData.length; i++) {
+            if (this.tableData[i].id === this.id) {
+              this.$set(this.tableData, i, this.form);
+              return;
+            }
           }
         }
       }
     },
     // 确定删除
     deleteRow() {
-      this.$message.success("删除成功");
-      this.delVisible = false;
-      if (this.tableData[this.idx].id === this.id) {
-        this.tableData.splice(this.idx, 1);
-      } else {
-        for (let i = 0; i < this.tableData.length; i++) {
-          if (this.tableData[i].id === this.id) {
-            this.tableData.splice(i, 1);
-            return;
-          }
+      request({
+        url: "/useradmin/index",
+        method: "post",
+        data: {
+          action: "delete",
+          id: this.id
         }
-      }
+      }).then(res => {
+        console.log("delres", res);
+        this.delVisible = false;
+        if (res.flag == 1) {
+          this.$message.success("删除成功");
+          if (this.tableData[this.idx].id === this.id) {
+            this.tableData.splice(this.idx, 1);
+          } else {
+            for (let i = 0; i < this.tableData.length; i++) {
+              if (this.tableData[i].id === this.id) {
+                this.tableData.splice(i, 1);
+                return;
+              }
+            }
+          }
+        } else {
+          this.$message.success("删除失败，" + res.msg);
+        }
+      });
     }
   }
 };
