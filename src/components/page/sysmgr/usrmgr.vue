@@ -18,8 +18,8 @@
 				<el-table-column prop="adddate" label="绑定时间" sortable width="150"></el-table-column>
 				<el-table-column prop="openid" label="openid"></el-table-column>
 				<el-table-column label="操作" width="180" align="center">
-					<template slot-scope="scope" >
-						<component v-for="optbtn in optbtns" v-bind:is="optbtn"></component>
+					<template slot-scope="scope">
+						<component v-for="optbtn in optbtns" v-bind:is="optbtn" @click="handleOpt(optbtn, scope.$index, scope.row)"></component>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -69,7 +69,7 @@
 				totalpage: 1,
 				multipleSelection: [],
 				select_word: "",
-				optbtns:['delete','modify'],
+				optbtns: ['delete', 'modify','premiss'],
 				del_list: [],
 				editVisible: false,
 				delVisible: false,
@@ -85,10 +85,56 @@
 		created() {
 			this.getData();
 		},
-		computed: {},
-		components:{
-			'delete':{render: h => h('el-button','测试'),props:{'type':'primary'}},	
-			'modify':{template:'<div>test</div>'}
+		components: {
+			'delete': {
+				render: function(h) {
+					return h('el-button', {
+						'class': 'red',
+						props: {
+							type: 'text',
+							icon: 'el-icon-delete'
+						},
+						on: {
+							click: (evt) => {
+								this.$emit('click', evt);
+							}
+						},
+					}, '删除');
+				}
+
+			},
+			'modify': {
+				render: function(h) {
+					return h('el-button', {
+						props: {
+							type: 'text',
+							icon: 'el-icon-edit'
+						},
+						on: {
+							click: (evt) => {
+								this.$emit('click', evt);
+							}
+						},
+					}, '修改');
+				}
+
+			},
+			'premiss': {
+				render: function(h) {
+					return h('el-button', {
+						props: {
+							type: 'text',
+							icon: 'el-icon-edit'
+						},
+						on: {
+							click: (evt) => {
+								this.$emit('click', evt);
+							}
+						},
+					}, '权限');
+				}
+
+			},
 		},
 		methods: {
 			// 分页导航
@@ -116,7 +162,13 @@
 				this.cur_page = 1;
 				this.getData();
 			},
-
+			
+			handleOpt(opt,index,row)
+			{
+				console.log(opt);
+				console.log(index);
+				console.log(row);
+			},
 			handleEdit(index, row) {
 				this.idx = index;
 				this.id = row.id;
@@ -165,7 +217,7 @@
 				}
 			}
 		}
-	
+
 	};
 </script>
 
